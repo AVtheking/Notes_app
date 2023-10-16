@@ -1,7 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const notesRouter = require("./routes/notes_route");
 const PORT = 3000;
 const app = express();
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(notesRouter);
 
 //Database
 const DB =
