@@ -23,4 +23,40 @@ notesRouter.post("/notes/add", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+notesRouter.get("/notes/get/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const notes = await Note.find({ userId });
+    res.json(notes);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+notesRouter.delete("/notes/delete", async (req, res) => {
+  try {
+    const { id } = req.body;
+    await Note.deleteOne({ id: id });
+    res.json({ msg: "note has been deleted succesfully" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+notesRouter.put("/notes/update", async (req, res) => {
+  try {
+    const { id, userId, title, content } = req.body;
+    await Note.deleteOne({ id: id });
+    let updatedNote = new Note({
+      id,
+      userId,
+      title,
+      content,
+    });
+    updatedNote = await updatedNote.save();
+    res.json({ msg: "note updated successfully" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = notesRouter;

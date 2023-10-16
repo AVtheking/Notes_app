@@ -17,7 +17,7 @@ const notesSchema = mongoose.Schema({
   },
   content: {
     type: String,
-    required: true,
+    // required: true,
     trim: true,
   },
   //   dateAdded: {
