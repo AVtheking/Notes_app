@@ -20,9 +20,10 @@ const notesSchema = mongoose.Schema({
     // required: true,
     trim: true,
   },
-  //   dateAdded: {
-  //     default: Date.now(),
-  //   },
+  dateAdded: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 const Note = mongoose.model("notes", notesSchema);
 module.exports = { Note };
