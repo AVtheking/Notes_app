@@ -5,16 +5,12 @@ const notesRouter = express.Router();
 
 notesRouter.post("/notes/add", auth, async (req, res) => {
   try {
-    const { id, userId, title, content } = req.body;
-    const existingId = await Note.findOne({ id });
-    // if (existingId) {
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "Note with same id exist ,please give different id" });
-    // }
+    const { title, content } = req.body;
+
+
     let newNote = new Note({
-      id,
-      userId,
+   
+   
       title,
       content,
     });
@@ -25,10 +21,10 @@ notesRouter.post("/notes/add", auth, async (req, res) => {
   }
 });
 
-notesRouter.get("/notes/get/:userId", auth, async (req, res) => {
+notesRouter.get("/notes/get/", auth, async (req:any, res:any) => {
   try {
-    const { userId } = req.params;
-    const notes = await Note.find({ userId });
+
+    const notes = await Note.findById(req.user);
     res.json(notes);
   } catch (e:any) {
     res.status(500).json({ error: e.message });
@@ -43,17 +39,17 @@ notesRouter.delete("/notes/delete", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-notesRouter.put("/notes/update", auth, async (req, res) => {
+notesRouter.patch("/notes/update", auth, async (req, res) => {
   try {
-    const { id, userId, title, content } = req.body;
-    await Note.deleteOne({ id: id });
-    let updatedNote = new Note({
-      id,
-      userId,
-      title,
-      content,
-    });
-    updatedNote = await updatedNote.save();
+    const { id,  title, content } = req.body;
+    let existingNote = await Note.findById(id);
+    if (!existingNote) {
+      return res.status(404).json({msg:"Note not found"})
+    }
+    existingNote.title = title;
+    existingNote.content=content
+  
+    existingNote = await existingNote.save();
     res.json({ msg: "note updated successfully" });
   } catch (e:any) {
     res.status(500).json({ error: e.message });

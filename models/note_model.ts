@@ -4,8 +4,8 @@ import { Schema, model } from "mongoose";
 
 
 interface INotes {
-  id: string,
-  userId: string,
+
+
   title: string,
   content?: string,
   createdAt:Date
@@ -13,15 +13,8 @@ interface INotes {
 }
 
 const notesSchema = new Schema<INotes>({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  userId: {
-    type: String,
-    required: true,
-  },
+ 
+
   title: {
     type: String,
     required: true,
