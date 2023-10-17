@@ -20,7 +20,7 @@ const notesSchema = mongoose.Schema({
     // required: true,
     trim: true,
   },
-  dateAdded: {
+  createdAt: {
     type: Date,
     default: Date.now(),
   },

@@ -6,11 +6,11 @@ notesRouter.post("/notes/add", async (req, res) => {
   try {
     const { id, userId, title, content } = req.body;
     const existingId = await Note.findOne({ id });
-    if (existingId) {
-      return res
-        .status(400)
-        .json({ msg: "Note with same id exist ,please give different id" });
-    }
+    // if (existingId) {
+    //   return res
+    //     .status(400)
+    //     .json({ msg: "Note with same id exist ,please give different id" });
+    // }
     let newNote = new Note({
       id,
       userId,
