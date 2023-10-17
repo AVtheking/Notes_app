@@ -1,17 +1,13 @@
 const express = require("express");
+const admin = require("../middlewares/admin");
 const { Note } = require("../models/note_model");
-const auth = require("../middlewares/auth");
-const notesRouter = express.Router();
+const adminRouter = express.Router();
 
-notesRouter.post("/notes/add", auth, async (req, res) => {
+adminRouter.post("/notes/admin/add", admin, async (req, res) => {
   try {
     const { id, userId, title, content } = req.body;
     const existingId = await Note.findOne({ id });
-    // if (existingId) {
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "Note with same id exist ,please give different id" });
-    // }
+
     let newNote = new Note({
       id,
       userId,
@@ -24,17 +20,16 @@ notesRouter.post("/notes/add", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
-notesRouter.get("/notes/get/:userId", auth, async (req, res) => {
+adminRouter.get("/notes/admin/get", admin, async (req, res) => {
   try {
-    const { userId } = req.params;
-    const notes = await Note.find({ userId });
+    //   const { userId } = req.params;
+    const notes = await Note.find();
     res.json(notes);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
-notesRouter.delete("/notes/delete", auth, async (req, res) => {
+adminRouter.delete("/notes/admin/delete", admin, async (req, res) => {
   try {
     const { id } = req.body;
     await Note.deleteOne({ id: id });
@@ -43,7 +38,7 @@ notesRouter.delete("/notes/delete", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-notesRouter.put("/notes/update", auth, async (req, res) => {
+adminRouter.put("/notes/admin/update", admin, async (req, res) => {
   try {
     const { id, userId, title, content } = req.body;
     await Note.deleteOne({ id: id });
@@ -59,5 +54,4 @@ notesRouter.put("/notes/update", auth, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
-module.exports = notesRouter;
+module.exports = adminRouter;
