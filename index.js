@@ -4,6 +4,7 @@ const notesRouter = require("./routes/notes_route");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth_router");
 const adminRouter = require("./routes/admin_router");
+require("dotenv").config();
 const PORT = 3000;
 const app = express();
 
@@ -17,13 +18,9 @@ app.use(notesRouter);
 app.use(authRouter);
 app.use(adminRouter);
 
-//Database
-const DB =
-  "mongodb+srv://test:test123@cluster0.dhaqmmz.mongodb.net/?retryWrites=true&w=majority";
-
 //connection to Database
 mongoose
-  .connect(DB)
+  .connect(process.env.DB)
   .then(() => {
     console.log("connection is successful");
   })
