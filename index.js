@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth_router");
 const adminRouter = require("./routes/admin_router");
 require("dotenv").config();
-const PORT = 3000;
+
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
@@ -28,6 +28,6 @@ mongoose
     console.log(e);
   });
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log(`connected at port ${PORT}`);
 });
