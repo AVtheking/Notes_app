@@ -1,4 +1,4 @@
-import express = require("express");
+import express from "express";
 const authRouter = express.Router();
 
 import authCtrl from "../controllers/auth_controller";

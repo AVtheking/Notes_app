@@ -1,4 +1,4 @@
-import express = require("express");
+import express from "express";
 import noteCtrl from "../controllers/notes_controller";
 import auth from "../middlewares/auth";
 const notesRouter = express.Router();

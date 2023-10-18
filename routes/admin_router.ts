@@ -1,7 +1,7 @@
-import express = require("express");
+import express from "express";
 import adminCtrl from "../controllers/admin_controller";
 import admin from "../middlewares/admin";
-const { Note } = require("../models/note_model");
+
 const adminRouter = express.Router();
 
 adminRouter.post("/notes/admin/add", admin,adminCtrl.addNote );
