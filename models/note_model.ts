@@ -9,15 +9,12 @@ interface INotes {
   title: string,
   content?: string,
   createdAt:Date
-  
-}
 
+}
 const notesSchema = new Schema<INotes>({
  
   userId: {
     type: String,
-    
-  
   },
   title: {
     type: String,
@@ -26,7 +23,7 @@ const notesSchema = new Schema<INotes>({
   },
   content: {
     type: String,
-    // required: true,
+
     trim: true,
   },
   createdAt: {

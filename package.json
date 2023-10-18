@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node index.ts",
@@ -30,5 +29,8 @@
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.5.0",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7"
   }
 }

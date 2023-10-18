@@ -1,11 +1,11 @@
 // @ts-ignore
 import jwt from "jsonwebtoken";
-// import { NextFunction, Request, Response } from "express";
+
 type UserId = string;
 const auth = async (req:any, res:any , next:any) => {
   try {
     const token = req.header("auth-token");
-    // console.log(token);
+   
     if (!token) {
       return res.status(401).json({ msg: "No Token" });
     }
