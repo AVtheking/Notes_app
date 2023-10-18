@@ -1,19 +1,21 @@
-import express from "express"
-import mongoose from "mongoose";
+import express  =require("express")
+import mongoose =require ("mongoose");
 import adminRouter from "./routes/admin_router";
 import authRouter from "./routes/auth_router";
 import notesRouter from "./routes/notes_route";
-
-import dotenv =require('dotenv') ;
+import cookieParser = require("cookie-parser");
+import dotenv =require("dotenv")
 
 dotenv.config();
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cookieParser());
 app.use(express.json());
-
+// app.use('/', (req, res) => {
+//     res.send('Hello World!');
+// });
 app.use(notesRouter);
 app.use(authRouter);
 app.use(adminRouter);
