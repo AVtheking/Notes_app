@@ -5,6 +5,9 @@ const authCtrl={
     signUp:async (req:any, res:any) => {
         try {
           const { username, password } = req.body;
+          if (!username || !password) {
+            return res.status(400).json({error:"fill all enteries"})
+          }
           // console.log("Hello1");
           const existingUser = await User.findOne({ username });
           // console.log("Hello2");
@@ -19,7 +22,7 @@ const authCtrl={
             password: hashedPassword,
           });
           user = await user.save();
-          res.json(user);
+          res.status(201).json(user);
         } catch (e:any) {
           res.status(500).json({ error: e.message });
         }

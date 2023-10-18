@@ -12,7 +12,7 @@ const noteCtrl = {
             });
             newNote = await newNote.save();
             console.log("here")
-          res.json(newNote);
+          res.status(201).json(newNote);
         } catch (e:any) {
           res.status(500).json({ error: e.message });
         }
