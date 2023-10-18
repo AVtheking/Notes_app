@@ -8,9 +8,9 @@ const authCtrl={
           if (!username || !password) {
             return res.status(400).json({error:"fill all enteries"})
           }
-          // console.log("Hello1");
+         
           const existingUser = await User.findOne({ username });
-          // console.log("Hello2");
+     
           if (existingUser) {
             return res
               .status(400)
