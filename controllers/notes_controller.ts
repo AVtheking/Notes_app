@@ -38,15 +38,13 @@ const noteCtrl = {
     updateNote:async (req:any, res:any) => {
         try {
           const { id,  title, content } = req.body;
-          let existingNote = await Note.findById({_id:id});
-          if (!existingNote) {
+          let existingNote = await Note.findByIdAndUpdate(id, { title , content},{new:true})
+          if (!existingNote)
+          {
             return res.status(404).json({msg:"Note not found"})
           }
-          existingNote.title = title;
-          existingNote.content=content
-        
-          existingNote = await existingNote.save();
-          res.json({ msg: "note updated successfully" });
+    
+          res.json({ msg: "note updated successfully",updatedNote:existingNote });
         } catch (e:any) {
           res.status(500).json({ error: e.message });
         }

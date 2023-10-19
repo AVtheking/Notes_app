@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 interface IUser{
   username: string,
   password: string,
-  email: string,
+  email: any,
   isEmailVerified: boolean,
   emailVerificationOTP:any,
   type:string

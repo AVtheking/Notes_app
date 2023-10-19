@@ -1,7 +1,7 @@
   import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from 'nodemailer';
 import { User } from "../models/user";
+import sendmail from "../utils/mailer";
 
     
 
@@ -13,43 +13,22 @@ import { User } from "../models/user";
               return res.status(400).json({error:"fill all enteries"})
             }
           
-            const existingUser = await User.findOne({ username });
+            const existingUser = await User.findOne({ email });
             
       
             if (existingUser) {
-              return res
+              if (!existingUser.isEmailVerified) {
+               await User.deleteOne({email})
+              }
+              else
+             { return res
                 .status(400)
-                .json({ msg: "User with the same username already exists" });
+                .json({ msg: "User with the same username already exists" });}
             }
             const hashedPassword = await bcryptjs.hash(password, 8);
             const otp = Math.floor(100000 + Math.random() * 900000); 
-
+            sendmail(email,otp)
             
-            const transporter =  nodemailer.createTransport({
-              host: 'smtp.gmail.com',
-              port: 465,
-              secure: true,
-              auth: {
-                user: "",
-                pass:"prvl uwin zkgq pfog   ",
-              
-            }
-          })
-          const mailOptions = {
-            from: "",
-            to: email,
-            subject: "Email verification code",
-            text:`Your OTP is ${otp}`
-          }
-          console.log("here") 
-
-            await transporter.sendMail(mailOptions, (error, info) => {
-              if (error)
-              { console.log(error) }
-              else {
-                console.log("Email sent:" +info.response)
-              }
-            })
             let user = new User({
               username,
               password: hashedPassword,
@@ -64,8 +43,8 @@ import { User } from "../models/user";
       },
       signIn: async (req: any, res: any) => {
           try
-      {   const { username, password } = req.body;
-          const user = await User.findOne({ username });
+      {   const { email, password } = req.body;
+          const user = await User.findOne({ email });
           if (!user) {
             return res.status(400).json({ msg: "No user exist with this username " });
           }
@@ -103,6 +82,7 @@ import { User } from "../models/user";
           return res.status(400).json({msg:"No user exists with this username"})
         }
         if (otp != user.emailVerificationOTP) {
+
           return res.status(400).json({msg:"Invalid otp"})
         }
         user.isEmailVerified = true
