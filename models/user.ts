@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 interface IUser{
   username: string,
   password: string,
+  email: any,
+  isEmailVerified: boolean,
+  emailVerificationOTP:any,
   type:string
 }
 
@@ -16,8 +19,22 @@ interface IUser{
   password: {
     type: String,
     required: true,
-  },
-  type: {
+   },
+   email: {
+     type: String,
+     required: true,
+     unique:true
+   },
+   isEmailVerified: {
+     type: Boolean,
+     default:false
+   },
+   emailVerificationOTP: {
+     type: Number,
+     
+   },
+   
+   type: {
     type: String,
     default: "user",
   },
