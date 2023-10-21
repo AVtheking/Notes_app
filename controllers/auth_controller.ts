@@ -25,22 +25,16 @@ const authCtrl = {
       }
       const hashedPassword = await bcryptjs.hash(password, 8);
       const otp = Math.floor(100000 + Math.random() * 900000);
-      let OTP = new Otp(
-        {
-          email,
-          otp,
-        },
-        {
-          expireAfterSeconds: 90,
-        }
-      );
+      let OTP = new Otp({
+        email,
+        otp,
+      });
       sendmail(email, otp);
 
       let user = new User({
         username,
         password: hashedPassword,
         email,
-        emailVerificationOTP: otp,
       });
 
       user = await user.save();
@@ -110,15 +104,14 @@ const authCtrl = {
         return res.status(400).json({ msg: "No user exists with this email" });
       }
       const otp = Math.floor(1000 + Math.random() * 9000);
-      let OTP = new Otp(
-        {
-          email,
-          otp,
-        },
-        {
-          expireAfterSeconds: 90,
-        }
-      );
+      let existingOtp = await Otp.findOne({ email });
+      if (existingOtp) {
+        await existingOtp.deleteOne({ email });
+      }
+      let OTP = new Otp({
+        email,
+        otp,
+      });
       OTP = await OTP.save();
       sendmail(email, otp);
       res.json({ msg: "Otp is send to your registered email" });
@@ -134,14 +127,16 @@ const authCtrl = {
         return res.status(500).json({ msg: "No user exists with this email" });
       }
       let OTP = await Otp.findOne({ email });
+      console.log(`otp found ${OTP}`);
       if (otp != OTP?.otp || !OTP) {
         return res.status(500).json({ msg: "Invalid otp" });
       }
-      await OTP.deleteOne({ email });
-      OTP = await OTP.save();
       const hashedPassword = await bcryptjs.hash(newPassword, 8);
       user.password = hashedPassword;
+      OTP = await OTP.deleteOne({ email });
+
       user = await user.save();
+      res.json(user);
     } catch (e: any) {
       return res.status(500).json({ error: e.message });
     }

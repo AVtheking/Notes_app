@@ -5,8 +5,8 @@ interface IUser {
   username: string;
   password: string;
   email: any;
-  isEmailVerified: boolean;
-  emailVerificationOTP: any;
+  isEmailVerified: boolean; 
+
   type: string;
 }
 
@@ -28,9 +28,6 @@ const userSchema = new mongoose.Schema<IUser>({
   isEmailVerified: {
     type: Boolean,
     default: false,
-  },
-  emailVerificationOTP: {
-    type: Number,
   },
 
   type: {
