@@ -16,8 +16,8 @@ app.use(express.json());
 // app.use('/', (req, res) => {
 //     res.send('Hello World!');
 // });
-app.use(notesRouter);
 app.use(authRouter);
+app.use(notesRouter);
 app.use(adminRouter);
 
 //connection to Database
@@ -26,10 +26,10 @@ mongoose
   .then(() => {
     console.log("connection is successful");
   })
-  .catch((e:any) => {
+  .catch((e: any) => {
     console.log(e);
   });
-  const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(process.env.PORT, () => {
   console.log(`connected at port ${PORT}`);
 });
