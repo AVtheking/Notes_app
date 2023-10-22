@@ -13,9 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.json());
-// app.use('/', (req, res) => {
-//     res.send('Hello World!');
-// });
+
 app.use(authRouter);
 app.use(notesRouter);
 app.use(adminRouter);
@@ -30,6 +28,6 @@ mongoose
     console.log(e);
   });
 const PORT = process.env.PORT || 5000;
-app.listen(process.env.PORT, () => {
+app.listen(PORT, () => {
   console.log(`connected at port ${PORT}`);
 });

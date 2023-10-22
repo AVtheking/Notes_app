@@ -1,15 +1,18 @@
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
+import validator from "validator";
 import Otp from "../models/otp";
 import { User } from "../models/user";
 import sendmail from "../utils/mailer";
-
 const authCtrl = {
   signUp: async (req: any, res: any) => {
     try {
       const { username, password, email } = req.body;
       if (!username || !password || !email) {
         return res.status(400).json({ error: "fill all entries" });
+      }
+      if (!validator.isEmail(email)) {
+        return res.status(400).json({ msg: "invalid email address" });
       }
 
       const existingUser = await User.findOne({ email });
@@ -78,19 +81,22 @@ const authCtrl = {
   verifyEmail: async (req: any, res: any) => {
     try {
       const { email, otp } = req.body;
-      let user = await User.findOne({ email });
+
       let OTP = await Otp.findOne({ email });
 
-      if (!user) {
-        return res.status(400).json({ msg: "No user exists with this email" });
-      }
       if (otp != OTP?.otp || !OTP) {
         return res.status(400).json({ msg: "Invalid otp" });
       }
-      user.isEmailVerified = true;
-      user = await user.save();
-      await OTP.deleteOne({ email });
-      OTP = await OTP.save();
+      await User.findOneAndUpdate(
+        { email },
+        {
+          isEmailVerified: true,
+        },
+        { new: true }
+      );
+
+      await Otp.deleteOne({ email });
+
       res.json({ msg: "Email is verified" });
     } catch (e: any) {
       res.status(500).json({ error: e.message });
@@ -122,20 +128,21 @@ const authCtrl = {
   changePassword: async (req: any, res: any) => {
     try {
       const { email, otp, newPassword } = req.body;
-      let user = await User.findOne({ email });
-      if (!user) {
-        return res.status(500).json({ msg: "No user exists with this email" });
-      }
+
       let OTP = await Otp.findOne({ email });
       console.log(`otp found ${OTP}`);
       if (otp != OTP?.otp || !OTP) {
         return res.status(500).json({ msg: "Invalid otp" });
       }
       const hashedPassword = await bcryptjs.hash(newPassword, 8);
-      user.password = hashedPassword;
-      OTP = await OTP.deleteOne({ email });
+      let user = await User.findOneAndUpdate(
+        { email },
+        {
+          password: hashedPassword,
+        },
+        { new: true }
+      );
 
-      user = await user.save();
       res.json(user);
     } catch (e: any) {
       return res.status(500).json({ error: e.message });
