@@ -17,6 +17,9 @@ app.use(express.json());
 app.use(authRouter);
 app.use(notesRouter);
 app.use(adminRouter);
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
 
 //connection to Database
 mongoose
