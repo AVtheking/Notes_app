@@ -4,16 +4,18 @@ import validator from "validator";
 import Otp from "../models/otp";
 import { User } from "../models/user";
 import sendmail from "../utils/mailer";
+import authSchema from "../utils/validation";
 const authCtrl = {
-  signUp: async (req: any, res: any) => {
+  signUp: async (req: any, res: any, next: any) => {
     try {
       const { username, password, email } = req.body;
-      if (!username || !password || !email) {
-        return res.status(400).json({ error: "fill all entries" });
-      }
-      if (!validator.isEmail(email)) {
-        return res.status(400).json({ msg: "invalid email address" });
-      }
+      // if (!username || !password || !email) {
+      //   return res.status(400).json({ error: "fill all entries" });
+      // }
+      const result = await authSchema.validateAsync(req.body);
+      // if (!validator.isEmail(email)) {
+      //   return res.status(400).json({ msg: "invalid email address" });
+      // }
 
       const existingUser = await User.findOne({ email });
 
